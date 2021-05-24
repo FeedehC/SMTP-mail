@@ -4,6 +4,7 @@
 import smtplib, ssl
 from email.mime.multipart import MIMEMultipart
 from email.utils import formataddr
+from email.mime.text import MIMEText
 
 #Dirección de email del destinatario 
 receiver_email = "feedehc@gmail.com" #"dbritos@gmail.com"
@@ -22,12 +23,14 @@ password = input(str("Ingrese su contraseña del correo remitente: ")) #Por segu
 #port = 465
 
 #El mensaje se escribe en formato HTML, con ayuda de la libreria email y mimemultipart
-message = MIMEMultipart("alternative")
+message = MIMEMultipart("mixed")
 message["Subject"] = "SMTP Coronati"
 message["From"] = formataddr(('Anonymous', sender_email))
 message["To"] = receiver_email
 
-#message["text"] = "Este es un mensaje de prueba de protocolo SMTP con remitente desconocido"
+text_msg = str("Este es un mensaje de prueba de protocolo SMTP con remitente desconocido")
+plaintext_part = MIMEText(text_msg, 'plain')
+message.attach(plaintext_part)
 
 with smtplib.SMTP(host=smtp_server, port=port) as server: 
     server.ehlo()
