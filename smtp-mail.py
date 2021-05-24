@@ -7,7 +7,7 @@ from email.utils import formataddr
 from email.mime.text import MIMEText
 
 #Dirección de email del destinatario 
-receiver_email = "feedehc@gmail.com" #"dbritos@gmail.com"
+receiver_email = "dbritos@gmail.com" #"feedehc@gmail.com"
 
 #Se usa remitente de Hotmail porque con Google Drive no es posible ocultar el remitente, a menos que se desactiven las opciones de seguridad de la cuenta,
 #Lo cual no es recomendable para la cuenta que usamos en el día a día
