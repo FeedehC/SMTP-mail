@@ -5,47 +5,35 @@ import smtplib, ssl
 from email.mime.multipart import MIMEMultipart
 from email.utils import formataddr
 
-# Correo del destinatario 
-mail_receptor = "feedehc@gmail.com" #"dbritos@gmail.com"
+#Dirección de email del destinatario 
+receiver_email = "feedehc@gmail.com" #"dbritos@gmail.com"
 
-# Credenciales para conexión SMTP:
+#Se usa remitente de Hotmail porque con Google Drive no es posible ocultar el remitente, a menos que se desactiven las opciones de seguridad de la cuenta,
+#Lo cual no es recomendable para la cuenta que usamos en el día a día
 
-""" Para google """
-# smtp_server = 'smtp.gmail.com'    
-# port = 465
-# sender = ''   # Direccion y contraseña del correo Gmail del remitente
-# password = ''
-
-""" Para outlook """
+#Outlook
 smtp_server = 'smtp.office365.com'  
 port = 587
-sender = '' # Direccion y contraseña del correo Hotmail/Outlook del remitente
-password = ''
+sender_email = 'federico.coronati@hotmail.com'
+password = input(str("Ingrese su contraseña del correo remitente: ")) #Por seguridad la contraseña se solicita en todos los envios
 
-# Se construye el mensaje en formato HTML y texto, por si falla el formateo a HTML se envie el de texto
+#Google Gmail
+#smtp_server = 'smtp.gmail.com'    
+#port = 465
+
+#El mensaje se escribe en formato HTML, con ayuda de la libreria email y mimemultipart
 message = MIMEMultipart("alternative")
-message["Subject"] = "SMTP Coronati Federico"
-message["From"] = formataddr(('Nadie', sender))
-message["To"] = mail_receptor
+message["Subject"] = "SMTP Coronati"
+message["From"] = formataddr(('Anonymous', sender_email))
+message["To"] = receiver_email
 
-# Creo el mensaje, lo que va despues de la barra invertida es el asunto
-text = """
-"""
+#message["text"] = "Este es un mensaje de prueba de protocolo SMTP con remitente desconocido"
 
-""" Para google. GOOGLE NO OCULTA EL CORREO DEL REMITENTE (FROM:) """
-# context = ssl.create_default_context()
-# with smtplib.SMTP_SSL(host=smtp_server, port=port, context=context) as server:
-#     print(server.login(sender, password))
-#     print(server.helo())
-#     # Enviamos el correo:
-#     server.sendmail(from_addr=sender, to_addrs=mail_receptor, msg=text)
-#     print(server.quit())
-
-""" Para outlok """ 
 with smtplib.SMTP(host=smtp_server, port=port) as server: 
-    print(server.ehlo())
-    print(server.starttls())
-    print(server.login(sender, password))
-    # Enviamos el correo:
-    server.sendmail(from_addr=sender, to_addrs=mail_receptor, msg=message.as_string())
-    print(server.quit())
+    server.ehlo()
+    server.starttls()
+    server.login(sender_email, password)
+    print("Login exitoso")    
+    server.sendmail(from_addr=sender_email, to_addrs=receiver_email, msg=message.as_string()) #Se envia el correo
+    print("Mensaje enviado correctamente desde: " + sender_email + " hacia: " + receiver_email)
+    server.quit()
